@@ -88,10 +88,10 @@ optional_group = parser.add_argument_group('Optional options')
 optional_group.add_argument('--amplicons', help='provide output from primersearch and summarize MIRU profile directly', action='store_true')
 optional_group.add_argument('--mismatch', type=int, dest="mismatch", required=False, default=18, help="Allowed percent mismatch. Default: 18")
 optional_group.add_argument('--nofasta', help='delete the fasta reads file generated if your reads are in fastq format', action='store_true')
-optional_group.add_argument('--min_length', type=int, dest='min_length', required=False, default=3, help='Minimum number of amplimers to obtain a reliable result, below this threshold the programs returns "Warning 1" for low coverage')
-optional_group.add_argument('--freq', type=float, dest='freq', required=False, default=0.6, help='Minimum frequency to obtain a reliable result, below this threshold the programs returns "Warning 2" for allele not fixed')
-optional_group.add_argument('--length_freq', type=int, dest='length_freq', required=False, default=20, help='Number of amplimers to obtain a reliable results with mixed alleles, below this threshold the programs returns "Warning 2" for allele not fixed')
-optional_group.add_argument('--length_mode', type=int, dest='length_mode', required=False, default=10, help='Number of amplimers to obtain a reliable results, below this threshold the programs returns "Warning 3" for possible polyclonal allele with low coverage')
+optional_group.add_argument('--min_amplicons', type=int, dest='min_amplicons', required=False, default=3, help='Minimum number of amplicons required for a reliable result. Below this threshold, the program returns "Warning 1" for low coverage. Default: 3')
+optional_group.add_argument('--freq', type=float, dest='freq', required=False, default=0.6, help='Minimum frequency required for a reliable result. Below this threshold, the program returns "Warning 2" for an unfixed allele. Default: 0.6')
+# optional_group.add_argument('--amplicon_freq', type=int, dest='amplicon_freq', required=False, default=20, help='Number of amplicons required for reliable results with mixed alleles. Below this threshold, the program returns "Warning 2" for an unfixed allele. Default: 20')
+optional_group.add_argument('--amplicon_mode', type=int, dest='amplicon_mode', required=False, default=10, help='Number of amplicons required for reliable results. Below this threshold, the program returns "Warning 3" for a possible polyclonal allele with low coverage. Default: 10')
 
 args = parser.parse_args()
 
@@ -214,15 +214,15 @@ miru_repeats['sample_prefix'] = sample_prefix
 for item in miru:
     if repeats[item] != []:
         try:
-            if len(repeats[item]) < args.min_length:
+            if len(repeats[item]) < args.min_amplicons:
                 repeat = f"{custom_mode(repeats[item])} (Warning 1: Low Coverage)"
-            # elif repeats[item].count(mode(repeats[item])) / len(repeats[item]) <= args.freq and len(repeats[item]) <= args.length_freq:
+            # elif repeats[item].count(mode(repeats[item])) / len(repeats[item]) <= args.freq and len(repeats[item]) <= args.amplicon_freq: ## If you need to put some minimum number of amplicon for those unfixed alleles, uncomment this line and the flag corresponded.
             elif repeats[item].count(mode(repeats[item])) / len(repeats[item]) <= args.freq:
-                repeat = f"{custom_mode(repeats[item])} (Warning 2: Allele not fixed)"
+                repeat = f"{custom_mode(repeats[item])} (Warning 2: Unfixed allele)"
             else:
                 repeat = custom_mode(repeats[item])
         except statistics.StatisticsError:
-            if len(repeats[item]) < args.length_mode:
+            if len(repeats[item]) < args.amplicon_mode:
                 repeat = f"{chooseMode(item, lookup, Counter(repeats[item]))} (Warning 3: Possible polyclonal {modes(repeats[item])}, Low Coverage)"
             else:
                 repeat = f"{chooseMode(item, lookup, Counter(repeats[item]))} (Warning 4: Possible polyclonal {modes(repeats[item])})"

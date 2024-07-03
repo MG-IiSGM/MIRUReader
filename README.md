@@ -22,6 +22,11 @@ Identify 24-locus MIRU-VNTR for _Mycobacterium tuberculosis_ complex (MTBC) dire
 
 ## Change log
 
+#### 03/07/2024
+
+- Added different depth and frequency parameters to flag potential suboptimal alleles.
+- Updated interpretation documentation to the README
+
 #### 13/09/2019
 
 - Added a check to ensure primersearch is executable prior to MIRUReader program execution
@@ -79,22 +84,22 @@ Notes:
 | --table TABLE     | Allele calling table, default is MIRU_table. Can be user-defined in fixed format. However, providing custom allele calling table for other VNTR is not tested. |
 | --primers PRIMERS | Primers sequences, default is MIRU_primers. Can be user-defined in fixed format.                                                                               |
 
-| Optional options | Description                                                                                                                                                        |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| --amplicons      | Use output from primersearch ("prefix.18.primersearch.out") and summarize MIRU profile directly.                                                                   |
-| --nofasta        | Delete fasta file generated if your input read is in fastq format.                                                                                                 |
-| --mismatch       | Allowed percent mismatch. Default: 18                                                                                                                              |
-| --min_length     | Minimum number of amplimers required to obtain a reliable result; below this threshold, the program returns "Warning 1" for low coverage.                          |
-| --freq           | Minimum frequency required to obtain a reliable result; below this threshold, the program returns "Warning 2" for an unfixed allele.                               |
-| --freq_length    | Number of amplimers required to obtain reliable results with mixed alleles; below this threshold, the program returns "Warning 2" for an unfixed allele.           |
-| --length_mode    | Number of amplimers required to obtain reliable results; below this threshold, the program returns "Warning 3" for a possible polyclonal allele with low coverage. |
+| Optional options | Description                                                                                                                                                                     |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| --amplicons      | Use output from primersearch ("prefix.18.primersearch.out") and summarize MIRU profile directly.                                                                                |
+| --nofasta        | Delete fasta file generated if your input read is in fastq format.                                                                                                              |
+| --mismatch       | Allowed percent mismatch. Default: 18                                                                                                                                           |
+| --min_amplicons  | Minimum number of amplicons required for a reliable result. Below this threshold, the program returns "Warning 1" for low coverage. Default: 3                                  |
+| --freq           | Minimum frequency required for a reliable result. Below this threshold, the program returns "Warning 2" for an unfixed allele. Default: 0.6                                     |
+| --amplicon_freq  | Number of amplicons required for reliable results with mixed alleles. Below this threshold, the program returns "Warning 2" for an unfixed allele. Default: 20 [Flag commented] |
+| --amplicon_mode  | Number of amplicons required for reliable results. Below this threshold, the program returns "Warning 3" for a possible polyclonal allele with low coverage. Default: 10        |
 
-| Interpretation | Description                                                                                                                         |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| Warning 1      | Low coverage (There are fewer than 3 amplimers, or the value indicated by --min_length.)                                            |
-| Warning 2      | Unfixed allele (When the majority value has a frequency of less than 0.6 and is supported by 20 or fewer amplimers at that locus.)  |
-| Warning 3      | Possible polyclonal - Low coverage (When there are 2 modes with values of the same majority frequency and fewer than 10 amplimers.) |
-| Warning 4      | Possible polyclonal (There are 2 modes and more than 10 amplimers validating the locus.)                                            |
+| Interpretation | Description                                                                                                                                             |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Warning 1      | Low coverage (There are fewer than 3 amplicons (default), or the value indicated by --min_amplicons)                                                    |
+| Warning 2      | Unfixed allele (When the majority value has a frequency of less than 0.6 (default) at that locus. [Supported by 20 or fewer amplicons, flag commented]) |
+| Warning 3      | Possible polyclonal - Low coverage (When there are 2 modes with values of the same majority frequency and fewer than 10 (default) amplicons)            |
+| Warning 4      | Possible polyclonal (There are 2 modes and more than 10 amplicons (default) validating the locus.)                                                      |
 
 All warnings must be taken into account due to low coverage or frequencies, and they should be inspected manually or even repeated.
 
@@ -107,3 +112,5 @@ MIRU loci 0580 (MIRU_table_0580) consist of a different numbering system for det
 ## Troubleshooting
 
 1. If an error message `OSError: primersearch is not found.` appears, please ensure your `primersearch` executable file is in your environment path (`echo $PATH`) and can be called directly.
+
+2. If analyzing from a `.fasta assembly`, 'Warning 1' for low coverage will appear, as contigs are used and only a single fragment should support the locus region.
