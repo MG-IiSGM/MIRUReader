@@ -94,12 +94,12 @@ Notes:
 | --amplicon_freq  | Number of amplicons required for reliable results with mixed alleles. Below this threshold, the program returns "Warning 2" for an unfixed allele. Default: 20 [Flag commented] |
 | --amplicon_mode  | Number of amplicons required for reliable results. Below this threshold, the program returns "Warning 3" for a possible polyclonal allele with low coverage. Default: 10        |
 
-| Interpretation | Description                                                                                                                                           |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Warning 1      | Low coverage. Fewer than 3 amplicons (default) as indicated by the --min_amplicons flag                                                               |
-| Warning 2      | Unfixed allele. Majority value frequency is less than 0.6 (default) at the locus, as indicated by the --freq flag                                     |
-| Warning 3      | Possible polyclonal - Low coverage. Two modes with the same frequency and fewer than 10 amplicons (default), as indicated by the --amplicon_mode flag |
-| Warning 4      | Possible polyclonal. Two modes and more than 10 amplicons (default) validating the locus, as indicated by the --amplicon_mode flag                    |
+| Interpretation | Description                                                                                                                                             |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Warning 1      | Low coverage. Fewer than 3 amplicons (default) as indicated by the `--min_amplicons` flag                                                               |
+| Warning 2      | Unfixed allele. Majority value frequency is less than 0.6 (default) at the locus, as indicated by the `--freq` flag                                     |
+| Warning 3      | Possible polyclonal - Low coverage. Two modes with the same frequency and fewer than 10 amplicons (default), as indicated by the `--amplicon_mode` flag |
+| Warning 4      | Possible polyclonal. Two modes and more than 10 amplicons (default) validating the locus, as indicated by the `--amplicon_mode` flag                    |
 
 All warnings must be taken into account due to low coverage or frequencies, and they should be inspected manually or even repeated.
 
