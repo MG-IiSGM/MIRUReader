@@ -94,14 +94,16 @@ Notes:
 | --amplicon_freq  | Number of amplicons required for reliable results with mixed alleles. Below this threshold, the program returns "Warning 2" for an unfixed allele. Default: 20 [Flag commented] |
 | --amplicon_mode  | Number of amplicons required for reliable results. Below this threshold, the program returns "Warning 3" for a possible polyclonal allele with low coverage. Default: 10        |
 
-| Interpretation | Description                                                                                                                                             |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Warning 1      | Low coverage (There are fewer than 3 amplicons (default), or the value indicated by --min_amplicons)                                                    |
-| Warning 2      | Unfixed allele (When the majority value has a frequency of less than 0.6 (default) at that locus. [Supported by 20 or fewer amplicons, flag commented]) |
-| Warning 3      | Possible polyclonal - Low coverage (When there are 2 modes with values of the same majority frequency and fewer than 10 (default) amplicons)            |
-| Warning 4      | Possible polyclonal (There are 2 modes and more than 10 amplicons (default) validating the locus.)                                                      |
+| Interpretation | Description                                                                                                                                           |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Warning 1      | Low coverage. Fewer than 3 amplicons (default) as indicated by the --min_amplicons flag                                                               |
+| Warning 2      | Unfixed allele. Majority value frequency is less than 0.6 (default) at the locus, as indicated by the --freq flag                                     |
+| Warning 3      | Possible polyclonal - Low coverage. Two modes with the same frequency and fewer than 10 amplicons (default), as indicated by the --amplicon_mode flag |
+| Warning 4      | Possible polyclonal. Two modes and more than 10 amplicons (default) validating the locus, as indicated by the --amplicon_mode flag                    |
 
 All warnings must be taken into account due to low coverage or frequencies, and they should be inspected manually or even repeated.
+
+If analyzing from a `.fasta assembly`, 'Warning 1' for low coverage will appear, as contigs are used and only a single fragment should support the locus region.
 
 ## FAQ
 
@@ -112,5 +114,3 @@ MIRU loci 0580 (MIRU_table_0580) consist of a different numbering system for det
 ## Troubleshooting
 
 1. If an error message `OSError: primersearch is not found.` appears, please ensure your `primersearch` executable file is in your environment path (`echo $PATH`) and can be called directly.
-
-2. If analyzing from a `.fasta assembly`, 'Warning 1' for low coverage will appear, as contigs are used and only a single fragment should support the locus region.
